@@ -1,9 +1,19 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from './entities/user.entity';
+import { TypeOrmConfigService } from './configs/localDatabaseConfig';
+
+export const entities = [UserEntity];
 
 @Module({
-  imports: [],
+  imports: [
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+    }),
+    TypeOrmModule.forFeature(entities),
+  ],
   controllers: [UserController],
   providers: [UserService],
 })
